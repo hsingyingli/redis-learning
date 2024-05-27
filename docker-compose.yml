@@ -1,0 +1,26 @@
+version: "3"
+services:
+  master:
+    image: redis:7.2
+    ports: 
+      - "6379:6379"
+    container_name: redis-master
+    volumes:
+      - ./master/conf/:/usr/local/etc/redis
+      - ./master/data:/data
+
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  slave: 
+    image: redis:7.2
+    ports: 
+      - "6378:6379"
+    container_name: redis-slave
+    volumes:
+      - ./slave/conf:/usr/local/etc/redis
+      - ./slave/data:/data
+
+    command: redis-server /usr/local/etc/redis/redis.conf
+    depends_on:
+      - master
+
